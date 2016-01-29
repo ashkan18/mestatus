@@ -7,7 +7,7 @@ defmodule Mestatus.UserStatusApi do
   #plug :check_token
   
   def create(conn, %{"text" => text, "user_name" => username}) do
-    [command, app, note] = String.split(text, ~r{\s}, trim: true, parts: 3)
+    [command, app, note] = parse_text(text)
     message = case command do
       x when x in ~w(intervened done) ->
         params = %{status: command, app: app, note: note, username: username}
@@ -41,6 +41,17 @@ defmodule Mestatus.UserStatusApi do
     json conn, response
   end
 
+  defp parse_text(text) do
+    splited_string = String.split(text, ~r{\s}, parts: 2)
+    [command | rest] = splited_string
+    [app | note] = if rest != [] do
+      String.split(List.first(rest), ~r{\s}, parts: 2)
+    else
+      [nil, []]
+    end
+    [command, app, List.first(note)]
+  end
+  
   defp check_token(conn, _) do
     token = conn.params["token"]
     unless token && token == Application.get_env(:mestatus, :slack)[:token] do
