@@ -14,6 +14,9 @@ config :mestatus, Mestatus.Endpoint,
   pubsub: [name: Mestatus.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :mestatus, :slack,
+  token: System.get_env("SLACK_TOKEN")  
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

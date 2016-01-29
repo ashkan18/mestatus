@@ -39,7 +39,7 @@ defmodule Mestatus.UserStatusApi do
 
   defp check_token(conn, _) do
     token = conn.params["token"]
-    unless token == "abc" do
+    unless token && token == Application.get_env(:mestatus, :slack)[:token] do
       conn |> put_status(400) |> halt
     else
       conn
