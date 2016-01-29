@@ -4,10 +4,9 @@ defmodule Mestatus.UserStatusApi do
 
   alias Mestatus.UserStatus
   
-  plug :check_token
+  #plug :check_token
   
   def create(conn, %{"text" => text, "user_name" => username}) do
-    Logger.info text
     [command, app, note] = String.split(text, ~r{\s}, trim: true, parts: 3)
     message = case command do
       x when x in ~w(intervened done) ->
@@ -16,10 +15,13 @@ defmodule Mestatus.UserStatusApi do
 
         case Repo.insert(changeset) do
           {:ok, user_status} ->
-            if user_status.status == 'intervened' do
-              "Sorry that you are blocked, let me know once you are unblocked."
-            else
-              "Stored your new status."
+            case user_status.status do
+              "intervened" ->
+                "Sorry that you are blocked, let me know once you are unblocked by sending done."
+              "done" ->
+                "Glad to hear you are back to normal life :shark:"
+              _ ->
+                "Stored your new status."
             end
             
           {:error, changeset} ->
@@ -28,7 +30,7 @@ defmodule Mestatus.UserStatusApi do
       "status" ->
         # show current status
         Repo.all(UserStatus.latest_status)
-        "Current staus" 
+        "Current status"
       _ ->
         "Unknown command"
     end
