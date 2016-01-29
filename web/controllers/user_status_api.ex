@@ -30,7 +30,7 @@ defmodule Mestatus.UserStatusApi do
       "current" ->
         # show current status
         statuses = Repo.all(UserStatus.latest_status)
-        for us <- statuses, into: "", do: "#{us.username} is #{us.status} on #{us.app} note: #{us.note}/n"
+        for us <- statuses, into: "", do: "#{us.username} is #{us.status} on #{us.app} note: #{us.note}\n"
       _ ->
         "Unknown command"
     end
