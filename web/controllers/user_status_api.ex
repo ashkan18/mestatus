@@ -1,11 +1,13 @@
 defmodule Mestatus.UserStatusApi do
   use Mestatus.Web, :controller
+  require Logger
 
   alias Mestatus.UserStatus
   
   plug :check_token
   
-  def create(conn, %{"text" => text, "user" => username}) do
+  def create(conn, %{"text" => text, "user_name" => username}) do
+    Logger.info text
     [command, app, note] = String.split(text, ~r{\s}, trim: true, parts: 3)
     message = case command do
       x when x in ~w(intervened done) ->
