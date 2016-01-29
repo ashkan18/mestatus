@@ -27,10 +27,10 @@ defmodule Mestatus.UserStatusApi do
           {:error, changeset} ->
             "There was an issue with setting status."
         end
-      "status" ->
+      "current" ->
         # show current status
-        Repo.all(UserStatus.latest_status)
-        "Current status"
+        statuses = Repo.all(UserStatus.latest_status)
+        for us <- statuses, into: "", do: "#{us.username} is #{us.status} on #{us.app} note: #{us.note}/n"
       _ ->
         "Unknown command"
     end
