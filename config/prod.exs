@@ -14,10 +14,10 @@ use Mix.Config
 config :mestatus, Mestatus.Endpoint,
   http: [port: System.get_env("PORT")],
   url: [host: "artsy-mestatus.herokuapp.com", port: 80],
-  secret_key_base: System.get_env("SECRET_KEY_BASE")  
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :debug
 
 # Configure your database
 config :mestatus, Mestatus.Repo,
